@@ -69,25 +69,22 @@ function App() {
     }, [readOnlyProposalContract, readOnlyProvider]);
 
     useEffect(() => {
+      fetchProposals();
       if (!readOnlyProposalContract) return;
 
       const handleVoted = (proposalId, voter) => {
         console.log(`Voter ${voter} has voted on proposal ${proposalId}`);
-        // Fetch proposals again to update the state
         fetchProposals();
       };
 
       const handleProposalCreated = (proposalId) => {
         console.log(`Proposal created with ID: ${proposalId}`);
-        // Fetch proposals again to update the state
         fetchProposals();
       };
 
-      // Set up event listeners
       readOnlyProposalContract.on("Voted", handleVoted);
       readOnlyProposalContract.on("ProposalCreated", handleProposalCreated);
 
-      // Cleanup function
       return () => {
         readOnlyProposalContract.off("Voted", handleVoted);
         readOnlyProposalContract.off("ProposalCreated", handleProposalCreated);
